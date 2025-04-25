@@ -10,6 +10,29 @@ import java.time.Duration;
 import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryTest {
+    private WebDriver driver;
+
+    @BeforeAll
+    static void setupAll() {
+        WebDriverManager.chromedriver().setup(); // Настройка WebDriverManager
+    }
+
+    @BeforeEach
+    void setup() {
+        // Здесь настраиваем headless-режим:
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        options.addArguments("--window-size=1920,1080");
+
+        driver = new ChromeDriver(options);
+    }
+
+    @AfterEach
+    void teardown() {
+        driver.quit();
+    }
 
     @Test
     void shouldSubmitValidForm() {
