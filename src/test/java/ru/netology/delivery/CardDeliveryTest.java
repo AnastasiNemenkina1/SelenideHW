@@ -11,25 +11,39 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryTest {
     @Test
-    void shouldSubmitRequest() {
-        String deliveryDate = generateDate(3);
-
-        open("http://localhost:9999");
-
-        $("[data-test-id=city] input").setValue("Москва");
-        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
-        $("[data-test-id=date] input").setValue(deliveryDate);
-        $("[data-test-id=name] input").setValue("Иванов Иван");
-        $("[data-test-id=phone] input").setValue("+79012345678");
-        $("[data-test-id=agreement]").click();
-        $$("button").find(Condition.exactText("Забронировать")).click();
+    public void positiveTest() {
+        open("http://localhost:9999/");
+        $("[data-test-id='city'] input").setValue("Москва");
+        String Date = generateData(3, "dd.MM.yyyy");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id='date'] input").setValue(Date);
+        $("[data-test-id='name'] input").setValue("Анастасия Гаврина");
+        $("[data-test-id='phone'] input").setValue("+79102436802");
+        $("[data-test-id='agreement']").click();
+        $("button.button").click();
         $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " + deliveryDate),
-                        Duration.ofSeconds(15));
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + Date));
     }
 
-    private String generateDate(int daysToAdd) {
-        return LocalDate.now().plusDays(daysToAdd)
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    @Test
+    public void tastTwoTest(){
+        open("http://localhost:9999/");
+        $("[data-test-id='city'] input").setValue("Мо");
+        $$(".menu-item__control").findBy(Condition.text("Москва")).click();
+        $(".input__control").click();
+        String Date = generateData(7, "dd.MM.yyyy");
+        $("[data-test-id='date'] input").click();
+        if (!generateData(3,"MM").equals(generateData(7,"MM"))){
+            $("[data-step='1']").click();
+        };
+        $$(".calendar__day").findBy(Condition.text(generateData(7,"dd"))).click();
+        $("[data-test-id='name'] input").setValue("Анастасия Гаврина");
+        $("[data-test-id='phone'] input").setValue("+79102436802");
+        $("[data-test-id='agreement']").click();
+        $("button.button").click();
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + Date));
     }
 }
