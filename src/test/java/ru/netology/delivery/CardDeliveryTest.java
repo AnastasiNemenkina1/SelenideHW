@@ -17,21 +17,11 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 public class CardDeliveryTest {
 
-    @BeforeAll
-    static void setupAll() {
-
-        Configuration.browser = "chrome";
-        Configuration.headless = true;
-        Configuration.timeout = 15000;
-        Configuration.browserSize = "1920x1080";
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless=new");
-        options.addArguments("--window-size=1920,1080");
-        Configuration.browserCapabilities = options;
+    LocalDate today = LocalDate.now();
+    public String generateDate(int days) {
+        return today.plusDays(days).format(DateTimeFormatter.ofPattern("dd,MM.yyyy"));
     }
+
 
     @Test
     void shouldSubmitValidForm() {
