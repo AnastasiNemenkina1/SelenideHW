@@ -27,23 +27,26 @@ public class CardDeliveryTest {
     }
 
     @Test
-    public void tastTwoTest(){
-        open("http://localhost:9999/");
-        $("[data-test-id='city'] input").setValue("Мо");
+    public void shouldSubmitWithCitySelection() {
+        open("http://localhost:9999");
+
+        $("[data-test-id=city] input").setValue("Мо");
         $$(".menu-item__control").findBy(Condition.text("Москва")).click();
-        $(".input__control").click();
-        String Date = generateData(7, "dd.MM.yyyy");
-        $("[data-test-id='date'] input").click();
-        if (!generateData(3,"MM").equals(generateData(7,"MM"))){
+
+        String deliveryDate = generateDate(7);
+        $("[data-test-id=date] input").click();
+
+        if (!generateDate(3, "MM").equals(generateDate(7, "MM"))) {
             $("[data-step='1']").click();
-        };
-        $$(".calendar__day").findBy(Condition.text(generateData(7,"dd"))).click();
-        $("[data-test-id='name'] input").setValue("Анастасия Гаврина");
-        $("[data-test-id='phone'] input").setValue("+79102436802");
-        $("[data-test-id='agreement']").click();
-        $("button.button").click();
+        }
+
+        $$(".calendar__day").findBy(Condition.text(generateDate(7, "dd"))).click();
+        $("[data-test-id=name] input").setValue("Анастасия Гаврина");
+        $("[data-test-id=phone] input").setValue("+79102436802");
+        $("[data-test-id=agreement]").click();
+        $$("button").find(Condition.exactText("Забронировать")).click();
+
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
-                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + Date));
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + deliveryDate));
     }
-}
