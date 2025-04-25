@@ -17,9 +17,21 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 public class CardDeliveryTest {
 
-    LocalDate today = LocalDate.now();
-    public String generateDate(int days) {
-        return today.plusDays(days).format(DateTimeFormatter.ofPattern("dd,MM.yyyy"));
+    @BeforeAll
+    static void setupAll() {
+        Configuration.browser = "chrome";
+        Configuration.headless = true;
+        Configuration.timeout = 15000;
+    }
+
+    @BeforeEach
+    void setup() {
+        open("http://localhost:9999");
+    }
+
+    private String generateDate(int daysToAdd, String pattern) {
+        return LocalDate.now().plusDays(daysToAdd)
+                .format(DateTimeFormatter.ofPattern(pattern));
     }
 
 
