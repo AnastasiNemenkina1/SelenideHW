@@ -1,37 +1,36 @@
 package ru.netology.delivery;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 public class CardDeliveryTest {
-    private WebDriver driver;
 
     @BeforeAll
     static void setupAll() {
-        WebDriverManager.chromedriver().setup(); // Настройка WebDriverManager
-    }
 
-    @BeforeEach
-    void setup() {
-        // Здесь настраиваем headless-режим:
+        Configuration.browser = "chrome";
+        Configuration.headless = true;
+        Configuration.timeout = 15000;
+        Configuration.browserSize = "1920x1080";
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
+        options.addArguments("--headless=new");
         options.addArguments("--window-size=1920,1080");
-
-        driver = new ChromeDriver(options);
-    }
-
-    @AfterEach
-    void teardown() {
-        driver.quit();
+        Configuration.browserCapabilities = options;
     }
 
     @Test
