@@ -17,10 +17,6 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 public class CardDeliveryTest {
 
-    private String generateData(int addDays, String pattern) {
-        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
-    }
-
     @Test
     void shouldSubmitValidForm() {
         open("http://localhost:9999");
